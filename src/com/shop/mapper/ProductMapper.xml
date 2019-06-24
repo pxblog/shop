@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.mapper.ProductMapper">
+
+  <!-- 产品映射集 -->
+  <resultMap type="product" id="productResultMap">
+  	<id column="ProductId" property="id"/>
+  	<result column="ProductName" property="name"/>
+  	<result column="ProductPrice" property="price"/>
+  	<result column="ProductPic" property="img"/>
+  	<result column="ProductOutline" property="desc"/>
+  	<result column="Productstorage" property="stock"/>
+  	<result column="ProductTypeId" property="categoryId"/>
+  </resultMap>
+  <!-- 类别映射器 -->
+  <resultMap type="Category" id="CategoryResultMap">
+  	<id column="TypeId" property="cid"/>
+  	<result column="TypeName" property="cname"/>
+  	<result column="TypeParentId" property="pid"/>
+  </resultMap>
+  
+  <select id="selectAllProduct" parameterType="Map"  resultMap="productResultMap">
+  	select * from product limit #{productNumByPageNum},#{pageSize}
+  </select>
+  
+  <select id="selectProductNum"  resultType="int">
+  	select count(*) from product
+  </select>
+  
+  <select id="selectFiveProductByKeyWord" parameterType="java.lang.String" resultMap="productResultMap">
+  	select * from product
+  	<where>
+  		ProductName like CONCAT(CONCAT('%', #{keyWord}), '%') limit 0,5
+  	</where>
+  </select>
+  
+  <select id="selectProductById" parameterType="Integer" resultMap="productResultMap">
+  	select * from product
+  	<where>
+  		ProductId = #{id}
+  	</where>
+  </select>
+  <!-- 获取产品的所有分类 -->
+  <select id="getCategorys"  resultMap="CategoryResultMap">
+  	select * from category
+  </select>
+  <!-- 通过Id删除数据 -->
+  <delete id="deleteProductById" parameterType="Integer" >
+  	delete from product 
+  	<where>
+  		ProductId = #{ProductId}
+  	</where>
+  </delete>
+  <!-- 添加新的产品记录 -->
+ <insert id="insertProduct" parameterType="product" >
+  	<!-- 获取刚刚插入数据的主键，但只适用于自增  | order：相对于sql语句的执行顺序  -->
+  	<selectKey keyProperty="id" order="AFTER" resultType="int">
+  		select last_insert_id()
+  	</selectKey>
+  	insert into product(ProductName,ProductPrice,ProductPic,ProductOutline,Productstorage,ProductTypeId) 
+  	values(#{name},#{price},#{img},#{desc},#{stock},#{categoryId})
+ </insert>
+ <!-- 更新产品记录 -->
+ <update id="updateProduct" parameterType="product" >
+ 	update product
+ 	<set>
+ 		ProductName=#{name},ProductPrice=#{price},ProductOutline=#{desc},Productstorage=#{stock},ProductTypeId=#{categoryId}
+ 		<if test="img!=null and img!=''">
+ 			,ProductPic=#{img}
+ 		</if>
+ 	</set>
+ 	<where>
+ 		ProductId=#{id}
+ 	</where>
+ </update>
+ <!-- 更新产品库存 -->
+ <update id="updateProductstorageByProductId" >
+ 	update product
+ 	<set>
+ 		Productstorage = Productstorage-#{param2}
+ 	</set>
+ 	<where>
+ 		ProductId = #{param1}
+ 	</where>
+ </update>
+ <!-- 根据产品Id获得该产品的库存 -->
+ <select id="getProductstorageByProductId" parameterType="Integer" resultType="Integer">
+ 	select Productstorage from product
+ 	<where>
+ 		ProductId = #{productid}
+ 	</where>
+ </select>
+ <!-- 通过搜索按钮传来的数据查询产品，类ajax -->
+ <select id="searchProductBySearchButton" parameterType="java.lang.String" resultMap="productResultMap">
+  	select * from product
+  	<where>
+  		ProductName like CONCAT(CONCAT('%', #{keyWord}), '%') 
+  	</where>
+  </select>
+</mapper>

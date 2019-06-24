@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.shop.mapper.OrderMapper">
+  	<!-- 建立order订单表的resultMap -->
+  	<resultMap type="orders" id="ordersResultMap">
+  		<id column="orderId" property="orderId"/>
+	  	<result column="createTime" property="createTime"/>
+	  	<result column="totalprice" property="sumPrice"/>
+	  	<result column="orderStatus" property="state"/>
+	  	<result column="remark" property="remark"/>
+  	</resultMap>
+  	<!-- 建立详细的order订单表的resultMap -->
+  	<resultMap type="orders" id="ordersPlusResultMap">
+  		<id column="orderId" property="orderId"/>
+	  	<result column="createTime" property="createTime"/>
+	  	<result column="totalprice" property="sumPrice"/>
+	  	<result column="orderStatus" property="state"/>
+	  	<result column="recevername" property="addressee"/>
+	  	<result column="cityAddress" property="cityAddress"/>
+	  	<result column="streetAddress" property="streetAddress"/>
+	  	<result column="phone" property="phone"/>
+  	</resultMap>
+  	
+  	<!-- 建立orderDetails表的resultMap -->
+  	<resultMap type="orderDetails" id="ordersDetailResultMap">
+  		<id column="OrderDetailId" property="id"/>
+	  	<result column="OrderId" property="orderId"/>
+	  	<result column="ProductId" property="productid"/>
+	  	<result column="orderamount" property="num"/>
+	  	<result column="saletotalprice" property="price"/>
+	  	<result column="ProductPic" property="image"/>
+	  	<result column="ProductName" property="productname"/>
+  	</resultMap>
+	<!-- 插入新订单  -->
+ 	<insert id="insertNewOrder" parameterType="orders" >
+		insert into orders (orderId,userid,maid,totalprice,createTime,payType,postType,remark) values
+		<trim prefix="(" suffix=")" >
+			#{orderId},#{userid},#{maid},#{sumPrice},#{createTime},#{payType},#{postType},#{remark}
+		</trim>
+	</insert>
+	<!-- 插入订单细节 -->
+  	<insert id="insertOrderDetails" parameterType="java.util.List">
+  		insert into orderitems (OrderId,ProductId,orderamount,saletotalprice) values
+  		<foreach collection="list" item="item"  separator="," close=";">
+			<trim prefix="(" suffix=")" >
+				#{item.orderId},#{item.productid},#{item.num},#{item.price}
+			</trim>
+		</foreach>
+  	</insert>
+  	<!-- 根据用户Id查询订单 -->
+  	<select id="selectOrdersByUserId" parameterType="Integer" resultMap="ordersResultMap">
+  		select * from orders
+  		<where>
+  			userid = #{userId}
+  		</where>
+  	</select>
+  	<!-- 根据用户Id和订单状态查询订单 -->
+  	<select id="selectOrdersByUserIdAndStatus" parameterType="Integer" resultMap="ordersResultMap">
+  		select * from orders
+  		<where>
+  			userid = #{param1} and orderStatus = #{param2}
+  		</where>
+  	</select>
+  	<!-- 根据订单id查询订单 -->
+  	<select id="selectOrderByOrderId" parameterType="java.lang.String" resultMap="ordersPlusResultMap">
+  		select ord.*,mai.recevername,mai.cityAddress,mai.streetAddress,mai.phone from orders as ord , mailingaddress as mai 
+  		<where>
+  			ord.orderId = #{orderId}
+			and ord.maid = mai.maid
+  		</where>
+  	</select>
+  	<!-- 根据订单Id查询订单细节 -->
+  	<select id="selectOrderDetailsByOrderId" parameterType="java.lang.String" resultMap="ordersDetailResultMap">
+  		select oi.*,pr.ProductName,pr.ProductPic from orderitems as oi,product as pr 
+		<where>
+			OrderId = #{orderId}  and oi.ProductId = pr.ProductId
+		</where>
+  	</select>
+  	<!-- 查询记录总量，用于订单的分页 -->
+	 <select id="selectAllOrderNum"  resultType="int">
+	  	select count(*) from orders
+	  </select>
+	<!-- 查询当前页面的订单记录 -->
+	<select id="selectOrdersByPageNum" parameterType="page"  resultMap="ordersResultMap">
+	  	select * from orders limit #{startIndex},#{pageSize}
+	</select>
+  	<!-- 更新订单的状态 
+  		  现今只有支付功能模拟，故于此设为固定值2，以免麻烦
+  	-->
+  	<update id="updateOrderStatus" parameterType="Integer">
+  		update orders
+  		<set>
+  			orderStatus = 2
+  		</set>
+  		<where>
+  			orderId = #{orderId}
+  		</where>
+  	</update>
+  </mapper>

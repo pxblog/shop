@@ -1,0 +1,44 @@
+*{
+	margin: 0px;
+	padding: 0px;
+}
+#main{
+	float: left;
+	width: 300px;
+	height: 300px;
+	overflow: hidden;
+	margin-right: 10px;
+	position: relative;
+	cursor: move;
+}
+.little_image img{
+	position:relative;
+	width: 300px;
+	height: 300px;
+}
+#max{
+	display: none;
+	float: left;
+	width: 300px;
+	height:300px;
+	overflow: hidden;
+	position: absolute;
+	left:300px;
+	z-index:100
+}
+.select{
+	display: none;
+	width: 100px;
+	height: 100px;
+	background: url(../images/T12pdtXaldXXXXXXXX-2-2.png);
+	position: absolute;
+	top:0px;
+	left: 0px;
+}
+.large{
+	width:790px;
+	height:790px;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+}

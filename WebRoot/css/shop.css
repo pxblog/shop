@@ -1,0 +1,165 @@
+nav{
+	z-index: 2;
+	width: 100%;
+	height: 46px;
+	background: darkmagenta;
+}
+nav ul li{
+	float: left;
+	height: 46px;
+	line-height: 46px;
+	padding: 0px  40px;
+	color: white;
+	font-size: 15px;
+
+}
+
+nav ul li:hover{
+	background: white;
+	color: darkmagenta;
+	font-weight: bold;
+}
+.nav-box{
+	width: 1000px;
+	height: 100%;
+	background: darkmagenta;
+	margin: 0 auto;
+}
+.banner{
+	position: relative;
+	overflow: hidden;
+	width: 1000px;
+    height: 314px;
+	margin: 0 auto;
+}
+.banner>ul img{
+	width: 100%;
+	height: 100%;
+}
+.banner ul{
+	width: 3000px;
+	position: relative;
+}
+.banner:hover>.left,.banner:hover>.right{
+	display: inline;
+}
+.banner ul li{
+float: left;
+width: 1000px;	
+}
+.banner .left{
+	position: absolute;
+	top: 130px;
+	left: 4px;
+	font-size: 50px;
+	color: gray;
+	display: none;
+	
+}
+.banner .left:hover,.banner .right:hover{
+	color: darkmagenta;
+	opacity: 0.5;
+	background: gray;
+	
+}
+.banner .right{
+	color: gray;
+	font-size: 50px;
+	position: absolute;
+	top: 130px;
+	right: 4px;
+	display: none;
+}
+.left img,.right img{
+	width: 55px;
+	height: 50px;
+}
+.floor{
+	width: 1000px;
+	margin: 0 auto;
+
+	text-align: center;
+}
+.floor-title{
+	padding: 0 10px;
+	height: 30px;
+	line-height: 30px;
+	
+}
+.floor-title>span:first-child{
+	color: darkmagenta;
+	font-size: 16px;
+	font-weight: bold;
+}
+.floor ul li{
+	width: 230px;
+	overflow:hidden;
+    padding: 4px 7px;
+    float: left;
+    margin-left: 2px;
+    border: 1px white solid;
+	
+}
+.floor ul li img{
+	height:230px;
+	cursor: pointer;
+}
+.floor ul li:hover{
+	opacity: 0.8;
+	border: 1px red solid;
+	color: red;
+}
+
+.floor ul{
+	margin: 0 auto;
+	border: 1px #f2f2f2 solid;
+}
+
+.floor ul li{
+	cursor: pointer;
+}
+
+.gotop{
+	color: gray;
+	font-size:40px;
+	font-weight: bolder;
+	line-height: 70px;
+	text-align: center;
+	height: 70px;
+	width: 70px;
+	opacity: 0.3;
+	background: black;
+	position: fixed;
+	bottom: 30px;
+	right: 20px;
+	display: none;
+}
+.gotop:hover{
+	background: darkmagenta;
+	opacity: 0.8;
+	color: white;
+}
+.page{
+	width: 1000px;
+	margin: 0 auto;
+	height: 60px;
+	line-height: 60px;
+	text-align: center;
+	
+}
+ .page a{
+ 	text-align: center;
+    margin: 4px;
+ 	display:inline-block;
+ 	line-height: 30px;
+ 	width: 46px;
+ 	height: 30px;
+ 	border:1px darkmagenta solid;
+ 	
+ }
+  .page a:hover{
+    background:darkmagenta;
+ 	color:white;
+ 	
+ }
+

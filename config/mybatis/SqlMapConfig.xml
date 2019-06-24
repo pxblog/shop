@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 加载属性文件，已经交由Spring加载 -->
+	<!-- 定义别名 -->
+	<typeAliases>
+		<!-- 定义单个 -->
+		<!-- <typeAlias type="" alias=""/> -->
+		<package name="com.shop.entity"/>
+	</typeAliases>
+	<!-- 配置mybatis的环境信息，已与spring整合，该信息由spring来管理 -->
+	<!-- 加载映射文件 -->
+	<!-- <mappers>
+		<mapper resource="sqlMap/UserMapper.xml" />
+		<mapper resource="mapper/UserMapper.xml" />
+	 	批量加载多个映射文件和用类名加载【加载相应的mapper接口】,需要把xml文件和接口文件放在同一文件夹下，即使用mapper代理
+	 	<package name="myBatisTest"/>
+	</mappers> -->
+</configuration>

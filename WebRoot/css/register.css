@@ -1,0 +1,57 @@
+form{
+	border-top: 2px darkmagenta solid;
+}
+.register{
+	width: 1000px;
+	/*height: 600px;*/
+	margin-left: auto;
+	margin-right: auto;
+	background: white;
+	margin-top: 30px;
+}
+
+
+.userphone_div,.useremail_div,.userepwd_div,.userepwdsecond_div{
+padding-top: 40px;
+margin:auto 30px ;
+
+padding-bottom: 10px;
+}
+
+.clause_div{
+padding-top: 40px;
+ margin-left: 110px;	
+padding-bottom: 10px;
+}
+.user_register_button input{
+	margin-left: 110px;
+	width: 170px;
+	height: 36px; 
+	background: darkmagenta;
+	border: none;
+	color: white;
+}
+
+input{
+	border: 1px solid darkmagenta;
+}
+
+
+
+footer{
+	margin-top: 20px;
+	padding: 20px 0;
+	background: beige;
+	text-align: center;
+	width: 100%;
+
+}
+
+
+
+
+
+
+
+
+

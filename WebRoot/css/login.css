@@ -1,0 +1,36 @@
+.login{
+	width: 1000px;
+	margin:0 auto;
+	background: white;
+	padding-top: 30px;
+}
+form{
+ border-top: solid  2px  darkmagenta;
+ 	
+}
+.usercode_div,.userpwd_div,.user_login_button{
+padding-top: 40px;
+ margin-left: 30px;	
+ margin-right: 30px;
+padding-bottom: 10px;
+}
+.usercode_div input,.userpwd_div input{
+	border: 1px darkmagenta solid;
+	height: 28px;
+}
+.user_login_button input{
+	margin-left: 30px;
+	width: 180px;
+	height: 36px; 
+	background: darkmagenta;
+	border: 2px darkmagenta solid;
+	color: white;
+}
+footer{
+	margin-top: 100px;
+	padding: 20px 0;
+	background: beige;
+	text-align: center;
+	width: 100%;
+
+}

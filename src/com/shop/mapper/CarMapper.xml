@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.mapper.CarMapper">
+		<!-- 购物车的映射 -->
+	  <resultMap type="cart" id="cartResultMap">
+	  	<!--cart本身固有的信息映射 -->
+	  	<id column="carId" property="carId"/>
+	  	<result column="userId" property="uid"/>
+	  	<result column="orderAmount" property="num"/>
+	  	<association property="product" javaType="com.shop.entity.Product">
+	  		<id column="ProductId" property="id"/>
+		  	<result column="ProductName" property="name"/>
+		  	<result column="ProductPrice" property="price"/>
+		  	<result column="ProductPic" property="img"/>
+		  	<result column="ProductOutline" property="desc"/>
+		  	<result column="Productstorage" property="stock"/>
+		  	<result column="ProductTypeId" property="categoryId"/>
+	  	</association>
+	  </resultMap>
+
+	<!-- 添加商品 -->
+	<insert id="insertShop" parameterType="java.util.List" >
+		insert into shopcart (userId,productId,orderAmount) values
+		<foreach collection="list" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</insert>
+	<!-- 通过用户id和产品id判断该购物记录是否存在 -->
+	<select id="selectExistByUserId" parameterType="java.util.Map" resultType="Integer">
+		select count(*) from shopcart 
+		<where>
+			userId=#{userId} and productId=#{productId}
+		</where>
+	</select>
+	<!-- 根据用户id和产品id加入购物车 -->
+	<update id="updataOrderAmount" parameterType="java.util.Map">
+		update shopcart 
+		<set>
+			orderAmount = orderAmount+1
+		</set>
+		<where>
+			userId=#{userId} and productId=#{productId}
+		</where>
+	</update>
+	<!-- 根据carId增加数量 -->
+	<update id="increaseOrderAmountByCarId" parameterType="Integer">
+		update shopcart 
+		<set>
+			orderAmount = orderAmount+1
+		</set>
+		<where>
+			carId = #{carId}
+		</where>
+	</update>
+	<!-- 根据carId减少数量 -->
+	<update id="decreaseOrderAmountByCarId" parameterType="Integer" >
+		update shopcart 
+		<set>
+			orderAmount = orderAmount-1
+		</set>
+		<where>
+			carId = #{carId}
+		</where>
+	</update>
+	<!-- 根据carId和changeNum修改数量 -->
+	<update id="updateOrderAmountByCarIdAndChangeNum" parameterType="Integer" >
+		update shopcart 
+		<set>
+			orderAmount = orderAmount+#{param2}
+		</set>
+		<where>
+			carId = #{param1}
+		</where>
+	</update>
+	<!-- 根据carId删除记录 -->
+	<delete id="deleteOrderAmountByCarIds" parameterType="Integer[]">
+		delete from shopcart
+		<where>
+			carId in
+			<foreach collection="array" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</where>
+	</delete>
+	<!-- 根据用户查询他的购物车 -->
+	<select id="selectMyCartByUserId" parameterType="Integer" resultMap="cartResultMap">
+		select sc.carId,sc.userId,sc.orderAmount,pr.* from shopcart as sc INNER JOIN product as pr 
+		<where>
+			sc.productId = pr.ProductId and sc.userId=#{userId}
+		</where>
+	</select>
+	<!-- 根据购物车Id查询 -->
+	<select id="selectMyCartByCarIds" parameterType="Integer[]" resultMap="cartResultMap">
+		select sc.carId,sc.userId,sc.orderAmount,pr.* from shopcart as sc INNER JOIN product as pr 
+		<where>
+			sc.productId = pr.ProductId  and sc.carId in
+			<foreach collection="array" item="item"  open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</where>
+	</select>
+	
+</mapper>

@@ -1,0 +1,54 @@
+.container{
+	min-height:300px;
+}
+table input{
+	width: 22px;
+	background: none;
+	border: 1px gray solid;
+}
+table {
+	border-top:2px solid darkmagenta;
+    text-align: center;
+	width: 1000px;
+	margin: 0 auto;
+	border-collapse: collapse;
+	border-spacing: 0;
+
+}
+img{
+	/*border: 1px gray solid;*/
+	margin-right: 10px;
+}
+
+table tr{
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-bottom: solid  1px  #bbbbbb;
+}
+table img{
+	width:100px;
+	height:100px;
+}
+h1{
+padding-bottom: 10px;
+border-bottom: solid  1px  #BBBBBB;
+ 
+}
+.td2{
+  padding: 10px  2px;
+  margin-left: 50px;
+  margin-bottom: 50px;	
+}
+#count{
+background: none;
+color: white;
+background-color:darkmagenta ;
+padding: 10px;
+font-size: 20px;
+margin-top: 10px;
+margin-bottom: 10px;
+width: 100px;
+border: none;
+}
+
+

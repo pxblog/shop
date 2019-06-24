@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.mapper.UserInfoMapper">
+	 <sql id="query_user">
+		  UserName = #{userName} and UserPwd = #{pwd}
+	  </sql>
+  <resultMap type="UserInfo" id="userResultMap">
+  	<id column="UserId" property="id"/>
+  	<result column="UserName" property="userName"/>
+  	<result column="UserPwd" property="pwd"/>
+	<result column="Useremail" property="email"/>
+  </resultMap>
+
+	<insert id="insertUser" parameterType="userInfo" >
+	  	<!-- 获取刚刚插入数据的主键，但只适用于自增  | order：相对于sql语句的执行顺序  -->
+	  	<selectKey keyProperty="id" order="AFTER" resultType="int">
+	  		select last_insert_id()
+	  	</selectKey>
+	  	insert into users(UserName,UserPwd,Useremail) values(#{userName},#{pwd},#{email})
+	 </insert>
+		
+	<select id="checkExist" parameterType="String" resultType="Integer">
+		select count(*) from users 
+		<where>
+			UserName = #{userName}
+		</where>
+	</select>
+
+	<select id="checkUserRight" parameterType="userInfo" resultMap="userResultMap">
+		select * from users 
+		<where>
+			<include  refid="query_user"/>
+		</where>
+	</select>
+	<!-- 查询所有用户 -->
+	<select id="selectAllUser" resultMap="userResultMap">
+		select * from users
+	</select>
+	<!-- 查询记录总量，用于用户的分页 -->
+	 <select id="selectAllUerNum"  resultType="int">
+	  	select count(*) from users
+	  </select>
+	<!-- 查询当前页面的用户记录 -->
+	<select id="selectUserByPageNum" parameterType="page"  resultMap="userResultMap">
+	  	select * from users limit #{startIndex},#{pageSize}
+	</select>
+	<!-- 根据用户Id查询用户 -->
+	<select id="selectUserByUserId" parameterType="Integer"  resultMap="userResultMap">
+	  	select * from users 
+		<where>
+			UserId = #{UserId}
+		</where>
+	</select>
+	<!-- 根据用户Id更新用户信息 -->
+	<update id="updateUserByUser" parameterType="userInfo">
+		update users
+		<set>
+			UserName=#{userName} , UserPwd=#{pwd} , Useremail=#{email}
+		</set>
+		<where>
+			UserId=#{id}
+		</where>
+	</update>
+	<!-- 根据用户Id删除用户 -->
+	<delete id="deleteUserById" parameterType="Integer" >
+	  	delete from users 
+	  	<where>
+	  		UserId = #{UserId}
+	  	</where>
+	</delete>
+</mapper>

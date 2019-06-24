@@ -1,0 +1,85 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop" 
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
+    http://www.springframework.org/schema/mvc 
+    http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd 
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.3.xsd 
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-4.3.xsd 
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+    
+    <!-- 扫描注释 -->
+    <context:component-scan base-package="com.shop"></context:component-scan>
+    <!-- 加载数据库配置文件,由此可以把properties文件中的数据注入到本配置文件 -->  
+    <context:property-placeholder location="classpath:db.properties"/> 
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="driverClassName" value="${jdbc.driver}"></property>
+		<property name="maxActive" value="10"></property>
+		<property name="minIdle" value="5"></property>
+	</bean>
+	<!-- 配置sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 加载mysql配置文件 -->
+		<property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml"/>
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<!-- 
+		mapper开发的配置 
+		通过mapper接口来生成代理对象	
+		MapperFactoryBean
+	-->
+	<!-- <bean id="mapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.ssm.dao.UserMapper"/>	
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	</bean> -->
+	<!-- 
+		若映射文件过多，可使用mapper批量扫描
+		如在此处配置，mybatis的配置文件中关于mapper文件的配置可以省略
+		扫描的规则依然要遵循：
+			批量加载多个映射文件和用类名加载【加载相应的mapper接口】,
+			需要把xml文件和接口文件放在同一文件夹下，
+			且保持名称一致
+	 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 扫描多个包，用逗号隔开 -->
+		<property name="basePackage" value="com.shop.mapper"/>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+	</bean>
+	 <!-- 
+    	事务管理器
+     -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 数据库源 -->
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>    
+	<!-- 
+		通知 
+	 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 传播行为 -->
+			<tx:method name="save*" propagation="REQUIRED"/>
+			<tx:method name="insert*" propagation="REQUIRED"/>
+			<tx:method name="delete*" propagation="REQUIRED"/>
+			<tx:method name="update*" propagation="REQUIRED"/>
+			<tx:method name="select*" propagation="SUPPORTS" read-only="true"/>
+			<tx:method name="finde" propagation="SUPPORTS" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	<!-- 
+		aop配置
+	 -->
+	 <aop:config>
+	 	<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.shop.service.Impl.*.*(..))"/>
+	 </aop:config>
+</beans>

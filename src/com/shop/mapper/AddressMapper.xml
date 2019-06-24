@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.mapper.AddressMapper">
+
+	<resultMap type="mailingAddress" id="AddressMap">
+		<id column="maid" property="maid"/>
+	  	<result column="userid" property="userid"/>
+	  	<result column="recevername" property="addressee"/>
+	  	<result column="cityAddress" property="cityAddress"/>
+	  	<result column="streetAddress" property="streetAddress"/>
+	  	<result column="defaultAddress" property="defaultAddress"/>
+	  	<result column="phone" property="phone"/>
+	</resultMap>
+
+	<!-- 通过用户id查询名下地址 -->
+	<select id="selectAddressesByUserId" parameterType="Integer" resultMap="AddressMap">
+		select * from mailingaddress 
+		<where>
+			userid = #{userId}
+		</where>
+	</select>
+	<!-- 通过mid查询相应地址 -->
+	<select id="selectAddressByMid" parameterType="Integer" resultMap="AddressMap">
+		select * from mailingaddress 
+		<where>
+			maid = #{maid}
+		</where>
+	</select>
+	
+	<!-- 在用户名下增加地址 -->
+	<insert id="addAddresses" parameterType="mailingAddress" >
+		<selectKey keyProperty="maid" order="AFTER" resultType="int">
+	  		select last_insert_id()
+	  	</selectKey>
+		insert into mailingaddress (userid,recevername,cityAddress,streetAddress,phone)
+		values(#{userid},#{addressee},#{cityAddress},#{streetAddress},#{phone})
+	</insert>
+	
+</mapper>

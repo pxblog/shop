@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.shop.mapper.MessageMapper">
+  
+  <insert id="sendMessage" parameterType="String">
+	  <selectKey keyProperty="id" order="AFTER" resultType="int">
+	  	select last_insert_id()
+	  </selectKey>
+  	 insert into message (userName,email,messageCont)
+  	 values(#{param1},#{param2},#{param3})
+  </insert>
+  
+  <select id="selectMessageByPage" parameterType="message" resultType="message">
+  	select * from message limit #{startIndex},#{pageSize}
+  </select>
+  <select id="selectAllMessageNum" resultType="Integer">
+  	select count(*) from message
+  </select>
+  <select id="selectMessageById" parameterType="Integer" resultType="message">
+  	select * from message
+  	where id = #{id}
+  </select>
+  <!-- 根据消息Id修改消息状态 -->
+  <update id="updateMessageStatusById" parameterType="Integer">
+  	update message
+  	<set>
+  		status = 1
+  	</set>
+  
+  </update>
+  </mapper>
